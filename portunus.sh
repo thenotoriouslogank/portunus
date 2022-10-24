@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # A script to set up your linux machine the way logank would want it set up
-export portunus=~/portunus
+export portunus=/home/$USER/portunus
 
 function prep {
     echo "Setting things up. . ."
