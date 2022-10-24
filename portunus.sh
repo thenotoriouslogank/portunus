@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # A script to set up your linux machine the way logank would want it set up
-export portunus=/home/$USER/portunus
+export portunus=~/portunus
 
 function prep {
     echo "Setting things up. . ."
@@ -22,6 +22,8 @@ function prep {
 function deliver {
     echo "Installing applications..."
     sudo apt install $(cat $portunus/.conf) -y
+    sudo bash ./gh-install.sh
+    sudo bash ./code-install.sh
     echo "Installation complete"
     clear
 }
@@ -30,12 +32,12 @@ function info {
     dt=$(date)
     locip=$(sudo lshw | grep ip= | cut -d "=" -f 7 | cut -d " " -f 1)
     pubip=$(dig +short myip.opendns.com @resolver1.opendns.com)
-    cpu=$(hwinfo | grep "model name" | head -1 | cut -d ":" -f 2)
-    gpu=$(hwinfo --gfxcard | grep Model | cut -d ":" -f 2)
-    ram=$(hwinfo --memory | grep Size | cut -d ":" -f 2)
-    netcard=$(hwinfo --network | grep File | head -1 | cut -d ":" -f 2)
-    sound=$(hwinfo --sound | grep Model | cut -d ":" -f 2)
-    disk=$(hwinfo --disk | grep Model | cut -d ":" -f 2)
+    cpu=$(sudo hwinfo | grep "model name" | head -1 | cut -d ":" -f 2)
+    gpu=$(sudo hwinfo --gfxcard | grep Model | cut -d ":" -f 2)
+    ram=$(sudo hwinfo --memory | grep Size | cut -d ":" -f 2)
+    netcard=$(sudo hwinfo --network | grep File | head -1 | cut -d ":" -f 2)
+    sound=$(sudo hwinfo --sound | grep Model | cut -d ":" -f 2)
+    disk=$(sudo hwinfo --disk | grep Model | cut -d ":" -f 2)
     clear
     echo "--------------------------------"
     echo "PORTUNUS LOGFILE"
@@ -58,6 +60,4 @@ function info {
     echo "Public IP:                $pubip"
 }
 
-prep
-deliver
-info > $portunus/log.txt
+prep && deliver && info > $portunus/log.txt
