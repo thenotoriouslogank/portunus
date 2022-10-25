@@ -4,9 +4,9 @@
 
 create() {
     chmod u+x ./portunus.sh
-    sudo mv ./portunus.sh /usr/bin/portunus
-    sudo mkdir /etc/portunus
-    sudo mv ./conf.d /etc/portunus/conf.d
+    mv ./portunus.sh /usr/bin/portunus
+    mkdir /etc/portunus
+    mv ./conf.d /etc/portunus/conf.d
 }
 
 #########################################
@@ -19,9 +19,9 @@ create() {
 #########################################
 prep() {
     echo "Setting things up. . ."
-    sudo apt update && sudo apt upgrade
+    apt update && apt upgrade
     if ! [ -f "/usr/bin/wget" ]; then
-        sudo apt install wget -y
+        apt install wget -y
     fi
     echo "Prep complete."
 }
@@ -34,12 +34,12 @@ prep() {
 #   None
 #########################################
 gh() {
-    type -p curl >/dev/null || sudo apt install curl -y
-    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg &&
-        sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg &&
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null &&
-        sudo apt update &&
-        sudo apt install gh -y
+    type -p curl >/dev/null || apt install curl -y
+    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg &&
+        chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg &&
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list >/dev/null &&
+        apt update &&
+        apt install gh -y
 }
 
 #########################################
@@ -63,12 +63,12 @@ omz() {
 #########################################
 vscode() {
     wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor >packages.microsoft.gpg
-    sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
-    sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+    install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+    sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
     rm -f packages.microsoft.gpg
-    sudo apt install apt-transport-https
-    sudo apt update -y
-    sudo apt install code
+    apt install apt-transport-https
+    apt update -y
+    apt install code
 }
 
 #########################################
@@ -82,7 +82,7 @@ vscode() {
 deliver() {
     echo "Installing applications..."
     source /etc/conf.d/packages.cfg
-    sudo apt install $packages
+    apt install $packages
     gh && vscode && omz
     echo "Installation complete"
 }
@@ -91,21 +91,21 @@ info() {
     local dt
     dt=$(date)
     local locip
-    locip=$(sudo lshw | grep ip= | cut -d "=" -f 7 | cut -d " " -f 1)
+    locip=$(lshw | grep ip= | cut -d "=" -f 7 | cut -d " " -f 1)
     local pubip
     pubip=$(dig +short myip.opendns.com @resolver1.opendns.com)
     local cpu
-    cpu=$(sudo hwinfo | grep "model name" | head -1 | cut -d ":" -f 2)
+    cpu=$(hwinfo | grep "model name" | head -1 | cut -d ":" -f 2)
     local gpu
-    gpu=$(sudo hwinfo --gfxcard | grep Model | cut -d ":" -f 2)
+    gpu=$(hwinfo --gfxcard | grep Model | cut -d ":" -f 2)
     local ram
-    ram=$(sudo hwinfo --memory | grep Size | cut -d ":" -f 2)
+    ram=$(hwinfo --memory | grep Size | cut -d ":" -f 2)
     local netcard
-    netcard=$(sudo hwinfo --network | grep File | head -1 | cut -d ":" -f 2)
+    netcard=$(hwinfo --network | grep File | head -1 | cut -d ":" -f 2)
     local sound
-    sound=$(sudo hwinfo --sound | grep Model | cut -d ":" -f 2)
+    sound=$(hwinfo --sound | grep Model | cut -d ":" -f 2)
     local disk
-    disk=$(sudo hwinfo --disk | grep Model | cut -d ":" -f 2)
+    disk=$(hwinfo --disk | grep Model | cut -d ":" -f 2)
     echo "--------------------------------"
     echo "PORTUNUS LOGFILE"
     echo "--------------------------------"
