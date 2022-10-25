@@ -17,7 +17,8 @@ function prep {
 # Install basic applications and dependencies via apt
 function deliver {
     echo "Installing applications..."
-    sudo apt install $(cat $portunus/.conf) -y
+    source ./conf.d/packages.cfg
+    sudo apt install $packages -y
     sudo bash ./conf.d/gh.sh
     sudo bash ./conf.d/vscode.sh
     echo "Installation complete"
