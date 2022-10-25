@@ -4,9 +4,9 @@
 
 create() {
     chmod u+x ./portunus.sh
-    mv ./portunus.sh /usr/bin/portunus
+    sudo mv ./portunus.sh /usr/bin/portunus
     sudo mkdir /etc/portunus
-    mv ./conf.d /etc/portunus/conf.d
+    sudo mv ./conf.d /etc/portunus/conf.d
 }
 
 #########################################
