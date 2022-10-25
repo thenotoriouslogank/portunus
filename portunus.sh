@@ -7,11 +7,7 @@ function prep {
     echo "Setting things up. . ."
     # Update apt sources
     sudo apt update && sudo apt upgrade
-    # Verify whether portunus directory exists; if not, create it
-    if ! [ -f "$portunus/.conf" ] ; then
-        touch $portunus/.conf
-        fi
-    # Ensure wget is installed before beginning install process
+# Ensure wget is installed before beginning install process
     if ! [ -f "/usr/bin/wget" ] ; then
         sudo apt install wget -y
         fi
@@ -22,8 +18,8 @@ function prep {
 function deliver {
     echo "Installing applications..."
     sudo apt install $(cat $portunus/.conf) -y
-    sudo bash ./gh-install.sh
-    sudo bash ./code-install.sh
+    sudo bash ./conf.d/gh.sh
+    sudo bash ./conf.d/vscode.sh
     echo "Installation complete"
     clear
 }
@@ -60,4 +56,4 @@ function info {
     echo "Public IP:                $pubip"
 }
 
-prep && deliver && info > $portunus/log.txt
+prep && deliver && info > $portunus/portunus.log
