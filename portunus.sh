@@ -4,9 +4,9 @@
 
 create() {
     chmod u+x ./portunus.sh
-    mv ./portunus.sh /usr/bin/portunus
+    cp -r ./portunus.sh /usr/bin/portunus
     mkdir /etc/portunus
-    mv ./conf.d /etc/portunus/conf.d
+    mv -r ./conf.d /etc/portunus/
 }
 
 #########################################
@@ -106,30 +106,30 @@ info() {
     sound=$(hwinfo --sound | grep Model | cut -d ":" -f 2)
     local disk
     disk=$(hwinfo --disk | grep Model | cut -d ":" -f 2)
-    echo "--------------------------------"
-    echo "PORTUNUS LOGFILE"
-    echo "--------------------------------"
-    echo "Portunus completion time: $dt"
-    echo "Last run by user:         $USER"
-    echo "--------------------------------"
-    echo "HARDWARE INFORMATION"
-    echo "--------------------------------"
-    echo "CPU:                     $cpu"
-    echo "GPU:                     $gpu"
-    echo "Storage:                 $disk"
-    echo "RAM:                     $ram"
-    echo "Network Interface:       $netcard"
-    echo "Sound:                   $sound"
-    echo "--------------------------------"
-    echo "NETWORK INFORMATION"
-    echo "--------------------------------"
-    echo "Local IP:                 $locip"
-    echo "Public IP:                $pubip"
+    echo "--------------------------------" \
+        echo "PORTUNUS LOGFILE" \
+        echo "--------------------------------" \
+        echo "Portunus completion time: $dt" \
+        echo "Last run by user:         $USER" \
+        echo "--------------------------------" \
+        echo "HARDWARE INFORMATION" \
+        echo "--------------------------------" \
+        echo "CPU:                     $cpu" \
+        echo "GPU:                     $gpu" \
+        echo "Storage:                 $disk" \
+        echo "RAM:                     $ram" \
+        echo "Network Interface:       $netcard" \
+        echo "Sound:                   $sound" \
+        echo "--------------------------------" \
+        echo "NETWORK INFORMATION" \
+        echo "--------------------------------" \
+        echo "Local IP:                 $locip" \
+        echo "Public IP:                $pubip" >/var/log/portunus.log
 }
 
 main() {
     create && prep &&
-        deliver && info >/var/log/portunus.log
+        deliver && info
 }
 
 main
